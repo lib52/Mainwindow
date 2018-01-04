@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "connection.h"
 #include <QSplitter>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -78,5 +79,34 @@ void MainWindow::on_sellFactoryComboBox_currentIndexChanged(const QString &arg1)
         model->setQuery(QString("select name from brand where factory ='%1' ").arg(arg1));
         ui->sellModelComboBox->setModel(model);
         ui->sellCancelBtn->setEnabled(true);
+    }
+}
+
+void MainWindow::on_sellModelComboBox_currentIndexChanged(const QString &arg1)
+{
+    ui->sellAmountSpinBox->setValue(0);
+    ui->sellAmountSpinBox->setEnabled(false);
+
+    ui->sellTotalLineEdit->clear();
+    ui->sellTotalLineEdit->setEnabled(false);
+
+    QSqlQuery query;
+    query.exec(QString("select price,last from brand where name ='%1' and factory ='%2' ").
+               arg(arg1).arg(ui->sellFactoryComboBox->currentText()));
+    query.next();
+
+    ui->sellPriceLineEdit->setEnabled(true);
+    ui->sellPriceLineEdit->setReadOnly(true);
+    ui->sellPriceLineEdit->setText(query.value(0).toString());
+
+    int num = query.value(1).toInt();
+    if(num==0){
+        QMessageBox::information(this,tr("warning"),tr("all have been sold out"),QMessageBox::Ok);
+
+    }
+    else{
+        ui->sellAmountSpinBox->setEnabled(true);
+        ui->sellAmountSpinBox->setMaximum(num);
+        ui->sellLastLabel->setText(tr("Remain:")+QString::number(num));
     }
 }

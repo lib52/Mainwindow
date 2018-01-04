@@ -29,6 +29,8 @@ private slots:
 
     void on_sellFactoryComboBox_currentIndexChanged(const QString &arg1);
 
+    void on_sellModelComboBox_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     void createMenuBar();
