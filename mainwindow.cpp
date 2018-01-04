@@ -110,3 +110,11 @@ void MainWindow::on_sellModelComboBox_currentIndexChanged(const QString &arg1)
         ui->sellLastLabel->setText(tr("Remain:")+QString::number(num));
     }
 }
+
+void MainWindow::on_sellAmountSpinBox_valueChanged(int arg1)
+{
+    int max = ui->sellAmountSpinBox->maximum();
+
+
+    ui->sellLastLabel->setText(tr("Remain:")+QString::number(max-arg1));
+}

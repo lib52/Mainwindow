@@ -31,6 +31,8 @@ private slots:
 
     void on_sellModelComboBox_currentIndexChanged(const QString &arg1);
 
+    void on_sellAmountSpinBox_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     void createMenuBar();
