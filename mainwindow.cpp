@@ -1,11 +1,28 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "connection.h"
+#include <QSplitter>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setFixedSize(750,500);
+    ui->stackedWidget->setCurrentIndex(0);
+    QSqlQueryModel *factoryModel =  new QSqlQueryModel(this);
+    factoryModel->setQuery("select name from factory");
+
+    ui->sellFactoryComboBox->setModel(factoryModel);
+
+    QSplitter *splitter = new QSplitter(ui->saleManagePage);
+    splitter->resize(700,360);
+
+    splitter->addWidget(ui->toolBox);
+    splitter->addWidget(ui->dailyList);
+
+    splitter->setStretchFactor(0,1);
+    splitter->setStretchFactor(1,1);
 
     createMenuBar();
 }
