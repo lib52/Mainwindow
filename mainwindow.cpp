@@ -117,4 +117,7 @@ void MainWindow::on_sellAmountSpinBox_valueChanged(int arg1)
 
 
     ui->sellLastLabel->setText(tr("Remain:")+QString::number(max-arg1));
+
+    int total = ui->sellPriceLineEdit->text().toInt()*arg1;
+    ui->sellTotalLineEdit->setText(QString::number(total));
 }
