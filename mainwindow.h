@@ -27,6 +27,8 @@ private slots:
     void on_chartMenuItem_clicked();
     void on_quitMenuItem_clicked();
 
+    void on_sellFactoryComboBox_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     void createMenuBar();

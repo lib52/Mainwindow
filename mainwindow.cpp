@@ -65,3 +65,18 @@ void MainWindow::on_quitMenuItem_clicked()
 {
     this->close();
 }
+
+void MainWindow::on_sellFactoryComboBox_currentIndexChanged(const QString &arg1)
+{
+    if(arg1=="please select brand"){
+        //on_sellCancelBtn_clicked();
+    }
+    else{
+        ui->sellModelComboBox->setEnabled(true);
+
+        QSqlQueryModel *model = new QSqlQueryModel(this);
+        model->setQuery(QString("select name from brand where factory ='%1' ").arg(arg1));
+        ui->sellModelComboBox->setModel(model);
+        ui->sellCancelBtn->setEnabled(true);
+    }
+}
