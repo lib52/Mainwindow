@@ -33,6 +33,10 @@ private slots:
 
     void on_sellAmountSpinBox_valueChanged(int arg1);
 
+    void on_sellCancelBtn_clicked();
+
+    void on_sellOkBtn_clicked();
+
 private:
     Ui::MainWindow *ui;
     void createMenuBar();

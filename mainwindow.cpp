@@ -70,7 +70,14 @@ void MainWindow::on_quitMenuItem_clicked()
 void MainWindow::on_sellFactoryComboBox_currentIndexChanged(const QString &arg1)
 {
     if(arg1=="please select brand"){
-        //on_sellCancelBtn_clicked();
+        on_sellCancelBtn_clicked();
+
+        ui->sellModelComboBox->setEnabled(true);
+
+
+        ui->sellModelComboBox->clear();
+
+
     }
     else{
         ui->sellModelComboBox->setEnabled(true);
@@ -120,4 +127,52 @@ void MainWindow::on_sellAmountSpinBox_valueChanged(int arg1)
 
     int total = ui->sellPriceLineEdit->text().toInt()*arg1;
     ui->sellTotalLineEdit->setText(QString::number(total));
+}
+
+void MainWindow::on_sellCancelBtn_clicked()
+{
+    ui->sellFactoryComboBox->setCurrentIndex(0);
+    ui->sellModelComboBox->clear();
+    //ui->sellModelComboBox->clearEditText();
+    //ui->sellModelComboBox->setModel(Q_NULLPTR);
+    //ui->sellModelComboBox->setCurrentText("");
+}
+
+void MainWindow::on_sellOkBtn_clicked()
+{
+    int num = ui->sellAmountSpinBox->value();
+    if(num==0) return;
+    QString factory = ui->sellFactoryComboBox->currentText();
+    QString model = ui->sellModelComboBox->currentText();
+
+    int remain = ui->sellAmountSpinBox->maximum()-num;
+
+    QSqlQuery query;
+    query.exec(QString("select sell from brand where factory ='%1' and name ='%2' ").arg(factory).arg(model));
+    query.next();
+
+    int sell = query.value(0).toInt();
+    sell = sell+ num;
+
+    bool result=query.exec(
+                QString("update brand set sell='%1' ,last ='%2' where name = '%3' and factory ='%4'")
+               .arg(sell).arg(remain).arg(model).arg(factory)
+               );
+    query.next();
+
+    if(result){
+        QSqlDatabase::database().commit();
+        QMessageBox::information(this,"warning","Buy car successfully!",QMessageBox::Ok);
+
+        //
+        //
+        on_sellCancelBtn_clicked();
+    }
+    else
+    {
+        QSqlDatabase::database().rollback();
+        QMessageBox::information(this,"error","Fail to buy car!",QMessageBox::Ok);
+    }
+
+
 }
